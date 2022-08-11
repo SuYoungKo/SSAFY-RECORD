@@ -1,0 +1,115 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <vector>
+#include <cstring>
+#include <algorithm>
+#include <stack>
+
+struct Node
+{
+	int x;
+	int y;
+};
+
+using namespace std;
+vector<vector<int>>arr(9);
+vector<vector<int>>clean(9);
+vector<Node>v;
+queue<Node>q;
+//int arr[9][9] = { 0 };
+
+int dx[4] = { -1,1,0,0 };
+int dy[4] = { 0,0,-1,1 };
+int N, M;
+int max_val = -9999;
+
+
+void bfs(Node A, Node B, Node C)
+{
+	int cnt = 0;
+	arr[A.x][A.y] = 1;
+	arr[B.x][B.y] = 1;
+	arr[C.x][C.y] = 1;
+
+	while (!q.empty())
+	{
+		Node now = q.front();
+		q.pop();
+
+		for (int i = 0; i < 4; i++)
+		{
+			int nx = now.x + dx[i];
+			int ny = now.y + dy[i];
+
+			if (nx < 0 || ny < 0 || nx >= N || ny >= M)continue;
+			if (arr[nx][ny] == 2 || arr[nx][ny] == 1)continue;
+
+			arr[nx][ny] = 2;
+			q.push({ nx,ny });
+		}
+	}
+
+	//개수찾기
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < M; j++)
+		{
+			if (arr[i][j] == 0) cnt++;
+		}
+	}
+	if (cnt > max_val) max_val = cnt;
+
+	//원래상태로 청소
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < M; j++)
+		{
+			arr[i][j] = clean[i][j];
+		}
+	}
+
+
+
+}
+
+
+
+
+int main()
+{
+	cin >> N >> M;
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < M; j++)
+		{
+			int x;
+			cin >> x;
+			arr[i].push_back(x);
+			clean[i].push_back(x);
+			//빈칸 찾을때마다 좌표 모음
+			if (arr[i][j] == 0) v.push_back({ i,j });
+			if (arr[i][j] == 2) q.push({ i,j });
+			//cin >> arr[i][j];
+		}
+	}
+
+	for (int a = 0; a < v.size(); a++)
+	{
+		for (int b = a + 1; b < v.size(); b++)
+		{
+			for (int c = b + 1; c < v.size(); c++)
+			{
+
+				bfs(v[a], v[b], v[c]);
+			}
+		}
+	}
+
+	cout << max_val;
+
+
+	
+
+	
+}

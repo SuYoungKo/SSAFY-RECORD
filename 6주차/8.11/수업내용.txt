@@ -1,0 +1,67 @@
+##DB
+
+crud
+
+/create : 
+	CREATE - DB, TABLE, USER ...
+	INSERT - TABLE에서 ROW 추가할때 
+/ read 
+	SELECT - 데이터 읽을때
+/ update 
+	UPDATE
+/ delete
+	DELETE - row 삭제
+	DROP - table, DB, USER 삭제
+
+==================================
+Field : (columns)
+Record : 한 행 전체를 말함
+Items : 각각의 항목을 말함
+
+==================================
+SELECT * FROM minco.honey => minco.honey의 값을 모두 가져오라
+* 대신 name을 치면 name만 가져옴
+(원하는 컬럼 이름을 입력하는것)
+
+==================================
+
+AND,OR
+
+==================================
+
+alias : 필드명 변경
+
+
+// 도전문제 조건대로 출력하기 (다음 설명에 맞는 Query 작성하기)
+//SELECT Address as "주소",City "도시",PostalCode "우편번호"  FROM Customers order by PostalCode desc ;
+//SELECT * FROM OrderDetails order by OrderDetailID desc limit 5 ;
+//SELECT * FROM Orders order by OrderID desc limit 7 offset 3;
+
+===================================
+ppt추가내용
+DELETE, UPDATE
+	회원탈퇴 복구기간
+	UPDATE로 탈퇴여부를 Y로 바꿔놓고 특정기간후 delete로 삭제
+
+
+
+=======================================
+
+## JOIN 
+
+* LEFT JOIN  왼쪽 테이블 기준으로 오른쪽에 붙임
+	* INNER JOIN 안씀
+	* RIGHT JOIN 안씀
+
+
+
+테이블과 테이블간의 관계 
+
+관계형 데이터 베이스 (관계 : 주키와 외래키의 연결) => PK - FK
+
+주키
+PK - 절대로 중복되어서는 안된다. (primary key)
+
+외래키
+FK  - 다른 테이블에 위치한 PK (Foreign Key) 
+	FK는 중복가능 -> 여러개를 살수 있기 때문에 
