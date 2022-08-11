@@ -1,0 +1,133 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+using namespace std;
+
+struct Node {
+    int row;
+    int col;
+};
+
+int rowSize, colSize;
+int MAP[10][10] = { 0, };
+vector<Node> blank;
+vector<Node> virus;
+//queue<Node> virus;
+// 1. bfs, 2. dfs
+//int bfs()
+//{
+//    // 1. 그래프 구성 <- 계산으로 처리
+//    int visited[10][10] = {0, };
+//    // 2. queue 생성
+//    // 3. 시작점 세팅 <- 모든 바이러스
+//    queue<Node> q = virus;
+//    
+//    int blankCnt = 0; // 빈칸의 개수
+//
+//    // 7. 4~6단계 반복
+//    while (!q.empty())
+//    {
+//        // 4. now
+//        Node now = q.front(); q.pop();
+//
+//        // 5. now->next
+//        int dr[] = { -1,1,0,0 };
+//        int dc[] = { 0,0,-1,1 };
+//        for (int i = 0; i < 4; i++)
+//        {
+//            int nr = now.row + dr[i];
+//            int nc = now.col + dc[i];
+//            if (visited[nr][nc]) continue; // 찾았떤 기록이 있으면 무시
+//            if (MAP[nr][nc] != 0) continue; // 빈칸이 아니면 가지 못함
+//            // 6. next를 queue에 추가
+//            visited[nr][nc] = 1;
+//            blankCnt++; // 바이러스가 전파된 빈칸의 개수
+//            q.push({ nr, nc });
+//        }
+//    }
+//    return blank.size() - 3 - blankCnt; // 전체 빈칸 개수 - 벽으로 만든 개수 - 전염된 빈칸 수 = 안전 구역의 수
+//}
+
+int visited[10][10] = { 0, };
+int blankCnt = 0;
+
+void dfs(Node now)
+{
+    int dr[] = {-1,1,0,0};
+    int dc[] = {0,0,-1,1};
+    for (int i = 0; i < 4; i++)
+    {
+        int nr = now.row + dr[i];
+        int nc = now.col + dc[i];
+        if (MAP[nr][nc] != 0) continue; // 빈칸이 아니면 가지 못함
+        if (visited[nr][nc]) continue; // 찾았떤 기록이 있으면 무시
+        visited[nr][nc] = 1;
+        blankCnt++;
+        dfs({ nr, nc });
+    }
+}
+
+
+
+
+void SetupWall(Node coord, int stat)
+{
+    // 벽을 세우거나 벽을 없애는 기능
+    MAP[coord.row][coord.col] = stat; // stat : 1 벽세우기, stat : 0 벽허물기
+}
+
+int solution()
+{
+    int maxValue = 0;
+    // 1. 3개의 빈칸을 뽑기
+    for (int i = 0; i < blank.size(); i++)
+        for (int j = i + 1; j < blank.size(); j++)
+            for (int k = j + 1; k < blank.size(); k++)
+            {
+                blank[i], blank[j], blank[k];
+                // 뽑은 빈칸에 벽 세우기
+                SetupWall(blank[i], 1);
+                SetupWall(blank[j], 1);
+                SetupWall(blank[k], 1);
+                // *바이러스를 전염 <- 전염되지 않은 빈칸 개수*
+
+                for (int row = 0; row < 10; row++)
+                    for (int col = 0; col < 10; col++)
+                        visited[row][col] = 0;
+                blankCnt = 0;
+
+                for (int l = 0; l < virus.size(); l++)
+                    dfs(virus[l]);
+                if (blankCnt == 35) int de = 1;
+                maxValue = max(maxValue, (int)blank.size() - 3 - blankCnt);
+
+                //maxValue = max(maxValue, bfs());
+                // 벽을 세운 부분을 복구
+                SetupWall(blank[i], 0);
+                SetupWall(blank[j], 0);
+                SetupWall(blank[k], 0);
+            }
+    return maxValue;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie();
+    cout.tie();
+    cin >> rowSize >> colSize;
+    for (int i = 0; i < 10; i++)
+        for (int j = 0; j < 10; j++)
+            MAP[i][j] = 1;
+    for (int row = 1; row <= rowSize; row++)
+        for (int col = 1; col <= colSize; col++)
+        {
+            cin >> MAP[row][col];
+            if (MAP[row][col] == 0)
+                blank.push_back({ row, col });
+            else if (MAP[row][col] == 2)
+            {
+                virus.push_back({ row, col });
+                //virus.push({row, col});
+            }
+        
