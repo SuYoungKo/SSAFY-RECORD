@@ -1,0 +1,25 @@
+#include <iostream>
+#include <string>
+using namespace std;
+string str = "##########";
+int bs(int s, int e) {
+    int last = -1;
+    while (s <= e) {
+        int mid = (s + e) / 2;
+        if (str[mid] == '#') {
+            last = mid;
+            s = mid + 1;
+        }
+        else { //'_'
+            e = mid - 1;
+        }
+    }
+    return last;
+}
+int main() {
+    int ret = bs(0, str.length() - 1);
+    ret++;
+    cout << ret * 100 / str.length() << "%";
+    
+    return 0;
+}

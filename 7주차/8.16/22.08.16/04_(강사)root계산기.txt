@@ -1,0 +1,29 @@
+#include <iostream>
+#include <string>
+using namespace std;
+int tar;
+
+int bs(int s, int e) {
+    int last = 1;
+    while (s <= e) {
+        int mid = (s + e) / 2;
+
+        if (mid * mid == tar) return mid;
+        if (mid * mid < tar) {
+            last = mid;
+            s = mid + 1;
+        }
+        else {
+            e = mid - 1;
+        }
+    }
+    return last;
+}
+
+int main() {
+    
+    cin >> tar;
+    int ret = bs(1, tar);
+    cout << ret;
+    return 0;
+}
