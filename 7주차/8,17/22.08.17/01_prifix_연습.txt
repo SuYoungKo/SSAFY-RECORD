@@ -1,0 +1,23 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <stack>
+#include <queue>
+#include <algorithm>
+using namespace std;
+
+int main() 
+{
+	int arr[10] = { 4,2,5,1,1,2,3,1,4,1 };
+	int ret[10] = { 0 };
+	int sum = 0;
+	int a, b;
+
+	cin >> a >> b;
+	ret[0] = 4;
+	for(int i = 1; i < 10; i++)
+	{
+		ret[i]  = ret[i-1] +  arr[i];
+	}
+	cout << ret[b] - ret[a-1];
+}
