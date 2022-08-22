@@ -1,0 +1,71 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <stack>
+#include <queue>
+#include <algorithm>
+#include <math.h>
+using namespace std;
+
+/*
+7 3
+1 0 0
+1 2 2
+0 3 0
+3 -10 -5
+15 -10 50
+15 -10 10
+0 6 4
+*/
+
+
+//1. 답(계산결과)이 바뀔 수 있는 변인요인 설정
+//		-> 개구리가 어느 위치에 도착했는가?
+//2. 변인요인 2가지 (row,col)
+//		배열설정 dp[row][col] = 해당좌표까지 갔을때의 최대 점수
+//3. now라는 상황이 있을때, 해당 상황이 발생할 수 있는 경우들
+//4. 해당 상황에대한 값을 활용하여 어떻게 계산할지
+
+
+int MAP[10][10] = { 0 };
+int dp[10][10];//dp[row][col]까지 왔을때의 최대점수를 저장
+int dr[3] = { 1,1,1 };
+int dc[3] = { -1,0,1 };
+void dfs(int row, int col) // dfs(now) : 지금 now좌표에 있다
+{
+	if (MAP[row][col] == 0)return;
+	//if (row + 1 > 7 || col - 1 <= 0 || col + 1 > 3)return;
+	
+	cout << row << " " << col << '\n';
+
+	for (int i = 0; i < 3; i++)
+	{
+		int nr = row + dr[i];
+		int nc = col + dc[i];
+		if (nr > 7 || nc <= 0 || nc > 3)continue;
+
+		dfs(nr, nc);
+	}
+	
+}
+int main()
+{
+	int R, C;
+	cin >> R >> C;
+	for (int i = 1; i <= R; i++)
+	{
+		for (int j = 1; j <= C; j++)
+		{
+			cin >> MAP[i][j];
+		}
+	}
+
+	for (int row = 1; row <= R; row++)
+		for (int col = 1; col <= C; col++)
+			dp[row][col] = -21e7;// 초기값 : 계산했던 좌표인지 => 0을 초기값으로 설정하면 계산해서 0점인지 아님 계산한게 아닌지 구분하기 힘듬
+								 // 계산상 나올 수 없는 값으로 세팅
+								 // 추후 세팅시 dp값을 봤을때 나올수 없는 값이면 아직 계산하지 않은 경우(한번 계한해보면 됨)
+								 // 계산상 나올 수 있는 값이면 다시 계산할 필요 없이 그냥 사용
+
+	dfs(1, 1);
+}

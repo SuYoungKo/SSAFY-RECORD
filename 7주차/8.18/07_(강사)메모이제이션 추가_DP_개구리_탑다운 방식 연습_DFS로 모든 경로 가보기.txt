@@ -1,0 +1,101 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <stack>
+#include <queue>
+#include <algorithm>
+#include <math.h>
+using namespace std;
+
+/*
+7 3
+1 0 0
+1 2 2
+0 3 0
+3 -10 -5
+15 -10 50
+15 -10 10
+0 6 4
+*/
+
+
+//1. 답(계산결과)이 바뀔 수 있는 변인요인 설정
+//		-> 개구리가 어느 위치에 도착했는가?
+//2. 변인요인 2가지 (row,col)
+//		배열설정 dp[row][col] = 해당좌표까지 갔을때의 최대 점수
+//3. now라는 상황이 있을때, 해당 상황이 발생할 수 있는 경우들
+//4. 해당 상황에대한 값을 활용하여 어떻게 계산할지
+
+
+int MAP[10][10] = { 0 };
+int dp[10][10];//dp[row][col]까지 왔을때의 최대점수를 저장
+int dr[3] = { 1,1,1 };
+int dc[3] = { -1,0,1 };
+int R, C;
+
+int dfs(int row, int col) // dfs(now) : 지금 now좌표에 있다
+//							now에서부터 끝까지 갔을때 결과가 어떻게 되는가? (미래의 결과)
+//							결과 : 점수(정수)
+{
+	if (row == R)//맨 밑줄이면 끝내라
+	{
+		dp[row][col] = MAP[row][col];
+		return MAP[row][col]; // 끝점부터 점수를 주게 됨
+	}
+
+	if (dp[row][col] != -21e7)
+		// 초기값 : 계산한적 없는값
+		// 초기값이 아닌경우 그안의 결과 사용
+	{
+		return dp[row][col];
+	}
+
+	//if (MAP[row][col] == 0)return;
+	//cout << row << " " << col << '\n';
+	int maxScore = -21e7;
+	for (int i = 0; i < 3; i++)
+	{
+		int nr = row + dr[i];
+		int nc = col + dc[i];
+		// 1. 경로상 갔던 점을 다시 가는가 ? ==> 무한반복이 되는가? ==> pass
+		// 2. 맵의 범위를 벗어나는 좌표를 가는가?
+		if (nr > R || nc <= 0 || nc > C)continue;
+
+		// 3. 벽일때
+		if (MAP[nr][nc] == 0)continue;
+
+		int nextScore = dfs(nr, nc); // <- dfs(next) : next부터 진행했을 때 결과 ==> now입장에서는 next에게 앞으로 어떻게 되는지 물어보는것.
+		//nextScore : {nr,nc}방향으로 진행했을 때 얻을 수 있는 최대 점수
+		maxScore = max(maxScore, nextScore);//3가지 방향 중 최대 점수
+	}
+	int nowScore = maxScore + MAP[row][col]; //앞으로 얻을 수 있는 최대점수 + now 좌표의 점수 = now에서 부터 얻을 수 있는 최대 점수
+	dp[row][col] = nowScore; // 계산결과 기록
+	
+	return nowScore;
+
+}
+
+
+
+int main()
+{
+	
+	cin >> R >> C;
+	for (int i = 1; i <= R; i++)
+	{
+		for (int j = 1; j <= C; j++)
+		{
+			cin >> MAP[i][j];
+		}
+	}
+
+	for (int row = 1; row <= R; row++)
+		for (int col = 1; col <= C; col++)
+			dp[row][col] = -21e7;// 초기값 : 계산했던 좌표인지 => 0을 초기값으로 설정하면 계산해서 0점인지 아님 계산한게 아닌지 구분하기 힘듬
+								 // 계산상 나올 수 없는 값으로 세팅
+								 // 추후 세팅시 dp값을 봤을때 나올수 없는 값이면 아직 계산하지 않은 경우(한번 계한해보면 됨)
+								 // 계산상 나올 수 있는 값이면 다시 계산할 필요 없이 그냥 사용
+
+	cout<<dfs(1, 1);
+	
+}

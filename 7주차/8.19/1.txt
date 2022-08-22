@@ -1,0 +1,36 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+
+int arr[110000];
+
+int main() {
+
+    //freopen_s(new FILE *, "input.txt", "r", stdin);
+    
+    int n;
+    cin >> n;
+
+    for (int i = 0; i < n; i++) cin >> arr[i];
+
+    int maxi = 0;
+    int maxIndex = -1;
+    for (int i = 0; i < n - 1; i++) {
+
+        int gap = arr[i + 1] - arr[i];
+        if (gap > maxi) {
+            maxi = gap;
+            maxIndex = i;
+        }
+    }
+
+    if (maxIndex == -1) {
+        cout << 0;
+        return 0;
+    }
+    cout << maxIndex + 1 << " " << maxIndex + 2;
+
+
+    return 0;
+}

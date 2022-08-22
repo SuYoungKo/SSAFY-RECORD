@@ -1,0 +1,36 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <stack>
+#include <queue>
+#include <algorithm>
+using namespace std;
+
+
+int fibo(int now)
+{
+	if (now <= 1)
+		return now; // fibo(1) : 1, fibo(0) : 0
+
+	int first = fibo(now - 1); // now -1번째 피보나치 수
+	int second = fibo(now - 2);// now -2번째 피보나치 수
+
+	int nowValue = first + second;
+
+	return nowValue;
+}
+
+void usedfibo()
+{
+	for (int i = 0; i <= 15; i++)
+	{
+		cout << fibo(i) << '\n';
+	}
+}
+
+int main()
+{
+	usedfibo();
+	
+
+}

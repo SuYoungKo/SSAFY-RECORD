@@ -1,0 +1,113 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <stack>
+#include <queue>
+#include <algorithm>
+#include <math.h>
+using namespace std;
+
+//시간복잡
+//1. 백트래킹
+//2. DFS
+//------------> 모든점에서 거리 4짜리 DFS
+//------------> 모든 점을 접근해보는 시간 O(N^2) = 500* 500 = 250000
+//------------> 모든 점에서 거리 4짜리 DFS (4^4 --> 대충 잡은거) == 300
+//------------> 총 반복횟수 대략(250000 * 300) 시간제한은 2초이기때문에 충분히 돌리고도 남음 
+//3. T블럭 ---> O(1)
+int map[501][501] = { 0 };
+int used[501][501] = { 0 };
+int dx[4] = { -1,1,0,0 };
+int dy[4] = { 0,0,-1,1 };
+int N, M;
+int tmp;
+int maxVal = -21e7;
+int cnt;
+
+void find()
+{
+	//ㅏ , ㅓ
+	for (int i = 0; i <= N - 3; i++)
+		{
+			for (int j = 0; j <= M - 2; j++)
+			{
+				int tmp = map[i][j] + map[i+1][j] + map[i + 1][j+1] + map[i + 2][j];
+				if (tmp > maxVal)maxVal = tmp;
+
+				tmp = map[i + 1][j] + map[i][j + 1] + map[i + 1][j + 1] + map[i + 2][j + 1];
+				if (tmp > maxVal)maxVal = tmp;
+			}
+		}
+
+	//ㅜ , ㅗ
+	for (int i = 0; i <= N - 2; i++)
+	{
+		for (int j = 0; j <= M - 3; j++)
+		{
+			int tmp = map[i][j] + map[i][j+1] + map[i][j + 2] + map[i + 1][j+1];
+			if (tmp > maxVal)maxVal = tmp;
+
+			tmp = map[i][j + 1] + map[i + 1][j] + map[i + 1][j + 1] + map[i + 1][j + 2];
+			if (tmp > maxVal)maxVal = tmp;
+		}
+	}
+
+}
+
+void dfs(int x, int y)
+{
+	if (cnt == 4)
+	{
+		if (tmp > maxVal) maxVal = tmp;
+		return;
+	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		int nx = x + dx[i];
+		int ny = y + dy[i];
+
+		if (nx < 0 || ny < 0 || nx >= N || ny >= M)continue;
+		if (used[nx][ny] == 1)continue;
+		used[nx][ny] = 1;
+		tmp += map[nx][ny];
+		cnt++;
+		dfs(nx, ny);
+		cnt--;
+		tmp -= map[nx][ny];
+		used[nx][ny] = 0;
+	}
+	
+}
+
+
+int main()
+{
+	cin >> N >> M;
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < M; j++)
+		{
+			cin >> map[i][j];
+		}
+	}
+
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < M; j++)
+		{
+			cnt = 1;
+			tmp = map[i][j];
+			used[i][j] = 1;
+			dfs(i, j);
+			used[i][j] = 0;
+			tmp = 0;
+			cnt = 0;
+		}
+	}
+
+	find();
+
+	cout << maxVal;
+
+}

@@ -1,0 +1,119 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <stack>
+#include <queue>
+#include <algorithm>
+#include <math.h>
+using namespace std;
+int map[501][501] = { 0 };
+int used[501][501] = { 0 };
+int dx[4] = { -1,1,0,0 };
+int dy[4] = { 0,0,-1,1 };
+int N, M;
+int tmp;
+int maxVal = -21e7;
+int cnt;
+
+void find()
+{
+	//ㅏ
+	for (int i = 0; i <= N - 3; i++)
+		{
+			for (int j = 0; j <= M - 2; j++)
+			{
+				int tmp = map[i][j] + map[i+1][j] + map[i + 1][j+1] + map[i + 2][j];
+				if (tmp > maxVal)maxVal = tmp;
+			}
+		}
+
+	//ㅜ
+	for (int i = 0; i <= N - 2; i++)
+	{
+		for (int j = 0; j <= M - 3; j++)
+		{
+			int tmp = map[i][j] + map[i][j+1] + map[i][j + 2] + map[i + 1][j+1];
+			if (tmp > maxVal)maxVal = tmp;
+		}
+	}
+
+	//ㅓ
+	for (int i = 0; i <= N - 3; i++)
+	{
+		for (int j = 0; j <= M - 2; j++)
+		{
+			int tmp = map[i+1][j] + map[i][j + 1] + map[i+1][j + 1] + map[i + 2][j + 1];
+			if (tmp > maxVal)maxVal = tmp;
+		}
+	}
+
+	//ㅗ
+	for (int i = 0; i <= N - 2; i++)
+	{
+		for (int j = 0; j <= M - 3; j++)
+		{
+			int tmp = map[i][j+1] + map[i+1][j] + map[i + 1][j + 1] + map[i + 1][j + 2];
+			if (tmp > maxVal)maxVal = tmp;
+		}
+	}
+}
+
+void dfs(int x, int y)
+{
+	if (cnt == 4)
+	{
+		if (tmp > maxVal) maxVal = tmp;
+		return;
+	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		int nx = x + dx[i];
+		int ny = y + dy[i];
+
+		if (nx < 0 || ny < 0 || nx >= N || ny >= M)continue;
+		if (used[nx][ny] == 1)continue;
+		used[nx][ny] = 1;
+		tmp += map[nx][ny];
+		cnt++;
+		dfs(nx, ny);
+		cnt--;
+		tmp -= map[nx][ny];
+		used[nx][ny] = 0;
+	}
+	
+}
+
+
+int main()
+{
+	cin >> N >> M;
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < M; j++)
+		{
+			cin >> map[i][j];
+		}
+	}
+
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < M; j++)
+		{
+			cnt = 1;
+			tmp = map[i][j];
+			used[i][j] = 1;
+			dfs(i, j);
+			used[i][j] = 0;
+			tmp = 0;
+			cnt = 0;
+		}
+	}
+
+	find();
+
+	cout << maxVal;
+
+	
+
+}

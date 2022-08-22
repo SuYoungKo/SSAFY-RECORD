@@ -1,0 +1,58 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <stack>
+#include <queue>
+#include <algorithm>
+using namespace std;
+
+void house()
+{
+	int dp[100][3] = { 0 }; //dp[집번호][인테리어 번호]; <- 해당 집번호, 인테리어 번호까지의 최소비용
+	int arr[4][3] = {
+		{10,20,30},
+		{20,30,40},
+		{40,20,10},
+		{50,10,100}
+	};
+
+	for (int i = 0; i < 4; i++)//집 번호
+	{
+		for (int j = 0; j < 3; j++)//인테리어
+		{
+			if (i == 0) { dp[i][j] = arr[i][j]; continue; }
+			//dp[i][j]<- 비용을 계산하고 싶음
+			if (j == 0)
+			{
+				// 이번이 0번 인테리어면 앞의 집은 1번 인테리어나 2번 인테리어를 했어야 한다.
+				// 근데 그중 더 작은 비용이 더 좋은 선택
+				int prev = min(dp[i - 1][1],dp[i - 1][2]); // min 까지는 앞의 선택
+				int now = prev + arr[i][j]; // 앞의 선택에 내 값까지 합쳐줌
+				dp[i][j] = now;
+			}
+			else if (j == 1)
+			{
+				int prev = min(dp[i - 1][0], dp[i - 1][2]); // min 까지는 앞의 선택
+				int now = prev + arr[i][j]; // 앞의 선택에 내 값까지 합쳐줌
+				dp[i][j] = now;
+			}
+			else if (j == 2)
+			{
+				int prev = min(dp[i - 1][1], dp[i - 1][0]); // min 까지는 앞의 선택
+				int now = prev + arr[i][j]; // 앞의 선택에 내 값까지 합쳐줌
+				dp[i][j] = now;
+			}
+				
+		}
+	}
+
+
+	
+}
+
+int main()
+{
+	house();
+	
+
+}

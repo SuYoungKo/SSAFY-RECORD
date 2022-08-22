@@ -1,0 +1,46 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <stack>
+#include <queue>
+#include <algorithm>
+using namespace std;
+
+long long dp[1000]; //앞에서 계산한 결과를 저장
+
+long long fibo(int now)
+{
+	if (now <= 1)
+	{
+		dp[now] = now;
+		return now; // fibo(1) : 1, fibo(0) : 0
+	}
+
+	if (dp[now])// 계산했던 결과가 존재한다.
+	{
+		return dp[now];
+	}
+	long long first = fibo(now - 1); // now -1번째 피보나치 수
+	long long second = fibo(now - 2);// now -2번째 피보나치 수
+
+	long long nowValue = first + second;
+
+	dp[now] = nowValue;
+
+	return nowValue;
+}
+
+void usedfibo()
+{
+	for (int i = 0; i <= 80; i++)
+	{
+		cout << fibo(i) << '\n';
+	}
+}
+
+int main()
+{
+	usedfibo();
+	
+
+}

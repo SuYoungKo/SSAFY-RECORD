@@ -1,0 +1,44 @@
+﻿#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <queue>
+#include <string>
+#include <stack>
+#include <cstring>
+
+using namespace std;
+
+
+
+int main()
+{
+	string s;
+	cin >> s;
+	int d = s.length() / 2;
+
+	int maxVal = -1;
+	string s1, s2;
+
+	for (int i = 0; i < d; i++)
+	{
+		int start = 0;
+		int end = start + (i + 1);
+		while (1)
+		{
+			s1 = s.substr(start, i + 1);
+			s2 = s.substr(end, i + 1);
+			if (s1 == s2)
+			{
+				if (i + 1 > maxVal) maxVal = i + 1;
+			}
+			start++;
+			end = start + (i + 1);
+			if (end >= s.length() - 1)break;
+		}
+	}
+
+	cout << maxVal;
+
+
+}
+

@@ -1,0 +1,88 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <queue>
+#include <string>
+#include <stack>
+#include <cstring>
+
+using namespace std;
+
+struct Point {
+	int x;
+	int y;
+	int vec;
+};
+
+
+int cnt = 0;
+int arr[16][16] = { 0 };
+int used[16][16] = { 0 };
+int dx[3] = { 0,1,1 };
+int dy[3] = { 1,0,1 };
+int N;
+
+
+void dfs(Point now)
+{
+	if (now.x == N - 1 && now.y == N - 1)
+	{
+		cnt++;
+		return;
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		if (now.vec == 0)
+		{
+			if (i == 1)continue;
+		}
+		if (now.vec == 1)
+		{
+			if (i == 0)continue;
+		}
+
+		int nx = now.x + dx[i];
+		int ny = now.y + dy[i];
+
+		if (nx < 0 || ny < 0 || nx >= N || ny >= N)continue;
+		if (arr[nx][ny] == 1)continue;
+		if (i == 2)
+		{
+			if ((arr[now.x + 1][now.y] == 1) || (arr[now.x][now.y + 1] == 1))continue;
+		}
+
+		if (used[nx][ny] == 1)continue;
+
+		used[nx][ny] = 1;
+		dfs({ nx,ny,i });
+		used[nx][ny] = 0;
+
+	}
+}
+
+int main()
+{
+	cin >> N;
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < N; j++)
+		{
+			cin >> arr[i][j];
+		}
+	}
+
+	arr[0][1] = 1;
+	arr[0][0] = 1;
+
+	used[0][1] = 1;
+	used[0][0] = 1;
+
+	Point start = { 0,1,0 }; // 0: 가로 1: 세로 2: 대각선
+
+
+	dfs(start);
+	cout << cnt;
+	
+}
+
