@@ -1,0 +1,51 @@
+//보스를 확인해 영업종료 확인
+//확인 후 n-1로 지정
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int T;
+int N;
+int car[110000];
+
+int line[110000];
+
+int findBoss(int tar) {
+    if (line[tar] == -1) return tar;
+    return line[tar] = findBoss(line[tar]);
+}
+
+void unionGroup(int a, int b) {
+    int t1 = findBoss(a);
+    int t2 = findBoss(b);
+    if (t1 == t2) return;
+    line[t2] = t1;
+}
+
+int main() {
+
+    //freopen_s(new FILE *, "input.txt", "r", stdin);
+
+    cin >> T >> N;
+    for (int i = 0; i < N; i++) cin >> car[i];
+    for (int i = 0; i < 110000; i++) line[i] = -1;
+
+    int cnt = 0;
+    for (int i = 0; i < N; i++) {
+        int tarCar = car[i];
+
+        //영업종료
+        int n = findBoss(tarCar);
+        if (n == 0) break;
+
+        //n - 1을 보스로 등록
+        unionGroup(n - 1, n);
+        cnt++;
+    }
+
+    cout << cnt;
+
+    return 0;
+}
