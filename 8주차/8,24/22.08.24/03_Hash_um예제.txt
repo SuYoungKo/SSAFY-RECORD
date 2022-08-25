@@ -1,0 +1,24 @@
+#include <iostream>
+//#include <vector>
+#include <string>
+//#include <stack>
+//#include <queue>
+//#include <algorithm>
+//#include <math.h>
+#include <map> //<------bst
+#include <unordered_map> //<------ hash
+using namespace std;
+
+int main()
+{
+	unordered_map<string, int> um;
+	unordered_map<string, vector<int>> um2;
+	vector<string> v = { "huhu","hot" ,"bts" ,"mc" ,"hot" ,"hot" };
+
+	um2["oh"] = { 1,5,3,4,2,3 };
+	for (int i = 0; i < um2["oh2"].size(); i++) {
+		cout << um2["oh2"][i];
+	}
+
+	return 0;
+}

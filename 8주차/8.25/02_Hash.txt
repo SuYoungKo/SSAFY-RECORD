@@ -1,0 +1,23 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+
+using namespace std;
+
+unordered_map<string, int>name2ID;
+void solution()
+{
+	//"abc" => 842947
+	// key값으로 변수가 들어갈 수도 있다
+	name2ID["abc"] = 842947;
+	cout << name2ID["abc"];
+}
+
+int main()
+{
+	solution();
+
+
+
+	
+}

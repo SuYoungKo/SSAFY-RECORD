@@ -1,0 +1,15 @@
+*HASH
+DAT로 해결할 수 있으면 DAT
+	=> 안되면 HASH
+	(index가 음수면 DAT는 안됨)
+
+* unordered_map<int, char> um;
+
+=> KEY : int 형
+=> VALUE : char 형
+
+ex) um[1548] = 'A';
+
+비교를 할때 if(um[30]==1) 이런식으로 하면 없어도 추가된다
+==> um에 비교할때마다 없는값이여도 추가된다
+==> if(um.count(30)) 이런식으로 개수로 비교

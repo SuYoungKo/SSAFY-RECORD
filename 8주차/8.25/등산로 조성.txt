@@ -1,0 +1,96 @@
+#include <iostream>
+#include<vector>
+using namespace std;
+
+struct Coord {
+    int row;
+    int col;
+};
+
+int N, K;
+int MAP[10][10];
+vector<Coord> pos;
+
+void input()
+{
+    cin >> N >> K;
+    int maxHeight = -1;
+    for (int row = 0; row < N; row++)
+        for (int col = 0; col < N; col++)
+        {
+            cin >> MAP[row][col];
+            if (MAP[row][col] > maxHeight)
+                pos.clear();
+            if (MAP[row][col] >= maxHeight)
+            {
+                pos.push_back({ row, col });
+                maxHeight = MAP[row][col];
+            }
+        }
+}
+
+// 갔던 점은 다시 가지 못하게 하는 기능
+int visited[10][10]; // used
+
+int dfs(Coord now, int flag, int height) // 현재 있는 좌표, 공사의 여부, 지금 좌표에 어느 높이로?
+// now에서부터 최대한 많이 갔을 때 몇 개의 점을 갈 수 있는가?
+// now에서부터 앞으로 '결과'가 어떻게 나올 것인가?
+{
+    if (now.row == 2 && now.col == 2)
+        int de = 1;
+    int ret = 1; // 초기값 : now는 일단 1개 포함(더 못가더라도)
+    int dr[] = { -1,1,0,0 };
+    int dc[] = { 0,0,-1,1 };
+    for (int i = 0; i < 4; i++)
+    {
+        int nr = now.row + dr[i];
+        int nc = now.col + dc[i];
+        if (nr < 0 || nc < 0 || nc >= N || nr >= N)
+            continue;
+        if (visited[nr][nc] != 0) continue;
+
+        visited[nr][nc] = 1;
+
+        if (height > MAP[nr][nc])
+        {
+            ret = max(ret,
+                dfs({ nr, nc }, flag, MAP[nr][nc]) + 1// next로 가면 최대 얼마나 갈 수 있는가?
+                ); 
+        }
+        else if (flag == 0 && height > MAP[nr][nc] - K) // <- 공사후엔 갈 수 있는가?
+        {
+            ret = max(ret,
+                dfs({ nr, nc }, 1, height - 1) + 1 // next로 가면 최대 얼마나 갈 수 있는가?
+            );
+        }// 다음좌표의 높이가 현재좌표의 높이 이상인 경우 <- 공사
+
+        visited[nr][nc] = 0; // 진짜 현재 경로와 동일하게 관리
+    }
+    return ret;
+}
+
+int solution()
+{
+    int ret = 0;
+    for (int i = 0; i < pos.size(); i++)
+    {
+        Coord st = pos[i]; // 등산로의 시작점
+        visited[st.row][st.col] = 1;
+        ret = max(ret, dfs(st, 0, MAP[st.row][st.col]));
+        visited[st.row][st.col] = 0;
+    }
+    return ret;
+}
+
+int main()
+{
+    int T;
+    cin >> T;
+    for (int tc = 1; tc <= T; tc++)
+    {
+        input();
+        cout << "#" << tc << " " << solution() << "\n";
+        int de = 1;
+    }
+    return 0;
+}

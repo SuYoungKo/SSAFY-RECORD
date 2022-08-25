@@ -1,0 +1,48 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+
+using namespace std;
+
+
+/*
+입력
+	첫번째 줄에 사람의 인원수 N이 주어짐
+	두번째 줄부터 N개의 줄에 걸쳐 사람이름과 팀번호 입력
+	마지막줄에 사람 이름 1개 입력
+
+출력
+	마지막줄에 입력받은 사람이 무슨 팀인지
+	팀을 배정받지 않은 사람인 경우 -1출력
+
+*/
+
+
+unordered_map<string, int>team;
+void solution()
+{
+	int N;
+	cin >> N;
+	for (int i = 0; i < N; i++)
+	{
+		string name;
+		int teamNum;
+		cin >> name >> teamNum;
+		team[name] = teamNum;
+	}
+	string find;
+	cin >> find;
+	//unordered_map[key] <- key를 기반으로 hash value를 계산하는 순간 data가 생성 (value = 0으로)
+	if (team.find(find)!= team.end()) // 존재여부를 판단
+		cout << -1;
+	else cout << team[find];
+}
+
+int main()
+{
+	solution();
+
+
+
+	
+}

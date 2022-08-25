@@ -1,0 +1,125 @@
+#include <iostream>
+#include <vector>
+#include <math.h>
+
+using namespace std;
+
+struct Node {
+	int x;
+	int y;
+};
+
+int map[10][10] = { 0 };
+int used[10][10] = { 0 };
+
+int cnt = 0;
+int save;
+
+int dx[] = { -1,1,0,0 };
+int dy[] = { 0,0,-1,1 };
+
+vector<Node>maxnum;
+
+int T, N, K;
+int maxD;
+
+void input()
+{
+	int maxN = -1;
+	cin >> N >> K;
+	for (int a = 0; a < N; a++)
+	{
+		for (int b = 0; b < N; b++)
+		{
+			// 제일 높은 봉우리 찾기
+			cin >> map[a][b];
+			if (map[a][b] > maxN)
+			{
+				maxnum.clear();
+				maxnum.push_back({a,b});
+				maxN = map[a][b];
+
+			}
+			else if (map[a][b] == maxN)
+			{
+				maxnum.push_back({ a,b });
+				maxN = map[a][b];
+			}
+		}
+	}
+
+}
+
+void dfs(Node now,int D, int flag)
+{
+	maxD = max(D, maxD);
+
+
+	for (int i = 0; i < 4; i++)
+	{
+		int nx = now.x + dx[i];
+		int ny = now.y + dy[i];
+
+		if (nx < 0 || ny < 0 || nx >= N || ny >= N)continue;
+		if (used[nx][ny] == 1)continue;
+		
+		if (map[nx][ny] >= map[now.x][now.y])
+		{
+			//K비교
+			if (flag == 0)
+			{
+				int X = map[nx][ny];
+				int Y = map[now.x][now.y] - 1;
+				if (K >= X - Y)
+				{
+					flag = 1;
+					save = map[nx][ny];
+					map[nx][ny] = map[now.x][now.y] - 1;
+					used[nx][ny] = 1;
+					Node next = { nx,ny };
+					dfs(next, D + 1, flag);
+					used[nx][ny] = 0;
+					map[nx][ny] = save;
+					flag = 0;
+				}
+			}
+
+			continue; //일단은 크거나 같은 애들도 구현을 하기 위해 무시
+		}
+
+		used[nx][ny] = 1;
+
+		Node next = { nx,ny };
+		dfs(next, D + 1, flag);
+		used[nx][ny] = 0;
+
+	}
+
+	
+}
+
+
+int main()
+{
+	cin >> T;
+	//테스트 케이스
+	for (int tc = 1; tc < T + 1; tc++)
+	{
+		//초기화 자리
+
+		//입력
+		input();
+		
+		maxD = -1;
+		for (int i = 0; i < maxnum.size(); i++)
+		{
+			used[maxnum[i].x][ maxnum[i].y] = 1;
+			dfs({ maxnum[i].x, maxnum[i].y },1,0);
+			used[maxnum[i].x][maxnum[i].y] = 0;
+		}
+		cout <<"#"<<tc<<" "<< maxD<<'\n';
+	}
+}
+
+
+

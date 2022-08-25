@@ -1,0 +1,223 @@
+#include <vector>
+#include <queue>
+#include <string>
+#include <cstring>
+#include <math.h>
+#include <iostream>
+
+using namespace std;
+
+struct Node {
+	int x;
+	int y;
+};
+
+
+int T;
+int N,W,H;
+int blockCnt = 0;
+
+int maxBall_x,maxBall_y,maxBall;
+
+int maxVal;
+int map[20][20] = { 0 };
+int used[20][20] = { 0 };
+
+
+int checkBall, checkBall_x, checkBall_y;
+
+void clear()
+{
+	for (int i = 0; i < 20; i++)
+		for (int j = 0; j < 20; j++)
+			map[i][j] = 0;
+}
+
+void clearUsed()
+{
+	for (int i = 0; i < 20; i++)
+		for (int j = 0; j < 20; j++)
+			used[i][j] = 0;
+}
+
+void input()
+{
+	cin >> N >> W >> H;
+	for (int i = 0; i < H; i++)
+		for (int j = 0; j < W; j++)
+			cin >> map[i][j];
+}
+
+int countBlock()
+{
+	int blockCnt = 0;
+	for (int i = 0; i < H; i++)
+		for (int j = 0; j < W; j++)
+			if (map[i][j] == 1)blockCnt++;
+	return blockCnt;
+}
+
+void dfs(Node now)
+{
+	
+	for (int i = 0; i < (map[now.x][now.y])-1; i++)
+	{
+		//map[now.x][now.y] = 0;
+		int dx[4] = { -1 - i,1 + i,0,0 };
+		int dy[4] = { 0,0,-1 - i,1 + i };
+		
+		for (int j = 0; j < 4; j++)
+		{
+			int nx = now.x + dx[j];
+			int ny = now.y + dy[j];
+			if (nx < 0 || ny < 0 || nx >= H || ny >= W)continue;
+			if (map[nx][ny] == 0)continue;
+			if (used[nx][ny] == 1)continue;
+			used[nx][ny] = 1;
+			dfs({ nx,ny });
+		}
+	}
+}
+
+int check(Node now)
+{
+	checkBall++;
+	for (int i = 0; i < (map[now.x][now.y])-1; i++)
+	{
+		int dx[4] = { -1-i,1+i,0,0 };
+		int dy[4] = { 0,0,-1-i,1+i };
+		for (int j = 0; j < 4; j++)
+		{
+			int nx = now.x + dx[j];
+			int ny = now.y + dy[j];
+			if (nx < 0 || ny < 0 || nx >= H || ny >= W)continue;
+			if (map[nx][ny] == 0)continue;
+			if (used[nx][ny] == 1)continue;
+			used[nx][ny] = 1;
+			check({ nx,ny });
+		}
+	}
+
+	return checkBall;
+
+}
+
+void gravity()
+{
+	for (int j = 0; j < W; j++)
+	{
+		int zerocnt = 0;
+		for (int i = H - 1; i >= 0; i--)
+		{
+			if (map[i][j] == 0) zerocnt++;
+			else {
+				if (zerocnt!=0)
+				{
+					map[i + zerocnt][j] = map[i][j];
+					map[i][j] = 0;
+				}
+			}
+		}
+	}
+}
+
+
+void shoot(int lev)
+{
+	if (lev == N)
+	{
+		int ret = countBlock();
+		if (ret > maxVal)maxVal = ret;
+		return;
+	}
+
+	
+	//이부분 완전탐색
+	for (int y = 0; y < W; y++)
+	{
+		
+		checkBall = 0;
+		for (int x = 0; x < H; x++)
+			if (map[x][y] != 0)
+			{
+				used[x][y] = 1;
+				int ch = check({ x,y });
+				//int ch = checkBall;
+
+				int ch2 = 0;
+				//다음거를 예상해야되나
+				checkBall = 0;
+				if (lev != (N - 1)) 
+				{
+					used[x + 1][y] = 1;
+					ch2 = check({ x + 1,y }); 
+					//ch2 = checkBall;
+				}
+				clearUsed();
+
+				if (ch + ch2 > maxBall)
+				{
+
+					maxBall = ch+ch2;
+					maxBall_x = x;
+					maxBall_y = y;
+				}
+				break;
+			}
+		
+	}
+
+	// ====공위치 잡음====
+
+	// 블록 깨뜨림
+	used[maxBall_x][maxBall_y ] = 1;
+	dfs({ maxBall_x,maxBall_y });
+
+	int debug = 0;
+	for (int i = 0; i < H; i++)
+	{
+		for (int j = 0; j < W; j++)
+		{
+			if (used[i][j] == 1)
+			{
+				map[i][j] = 0;
+				used[i][j] = 0;
+			}
+		}
+	}
+	// 중력블록 자리
+	gravity();
+	//다음 구슬 사용
+	maxBall = 0;
+	shoot(lev + 1);
+
+}
+
+
+int main() 
+{
+	cin >> T;
+
+	//초기화
+	for (int tc = 1; tc < 1 + T; tc++)
+	{
+		clear();
+		maxVal = 0;
+		input();
+		
+		shoot(0);
+
+
+		//카운트
+		int cnt = 0;
+		for(int i = 0; i < H; i++)
+		{
+			for (int j = 0; j < W; j++)
+			{
+				if (map[i][j] != 0)cnt++;
+			}
+		}
+		cout <<"#"<<tc<<" "<<cnt << '\n';
+	}
+	
+}

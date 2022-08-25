@@ -1,0 +1,21 @@
+#include <iostream>
+//#include <vector>
+//#include <string>
+//#include <stack>
+//#include <queue>
+//#include <algorithm>
+//#include <math.h>
+#include <map> //<------bst
+#include <unordered_map> //<------ hash
+using namespace std;
+
+int main()
+{
+	unordered_map<int, char> um;
+
+	um[1548] = 'A';
+	um[-123] = 'E';
+	cout << um[1548];
+	
+	return 0;
+}

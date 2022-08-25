@@ -1,0 +1,34 @@
+#include <iostream>
+//#include <vector>
+#include <string>
+//#include <stack>
+//#include <queue>
+//#include <algorithm>
+//#include <math.h>
+#include <map> //<------bst
+#include <unordered_map> //<------ hash
+using namespace std;
+
+int main()
+{
+	unordered_map<string, int> um;
+
+	string val[6] = { "huhu","hot" ,"bts" ,"mc" ,"hot" ,"hot" };
+
+	for (int i = 0; i < 6; i++)
+	{
+		um[val[i]]++;
+	}
+
+	string tar;
+	cin >> tar;
+
+	if (um.count(tar))
+	{
+		cout << um[tar];
+	}
+
+
+	
+	return 0;
+}
