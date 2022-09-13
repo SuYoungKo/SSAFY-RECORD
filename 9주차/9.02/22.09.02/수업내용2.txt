@@ -1,0 +1,19 @@
+1. 다 가져오기
+	GET /api/menus
+2. 하나만 가져오기
+	GET /api/menus/:id
+	[id == pk (primary key)]
+3. 추가하기
+	POST /api/menus
+	(무조건 바디로 줘야 하기 때문에 파라미터 입력 x)
+4. id에 해당하는거 수정하기
+	PATCH /api/menus/:id
+			id는 상황에 따라서 넣을때도 있고 뺄때도 있음
+			body로 하면 안넣음 > 대신 느림
+	id 해당 없이 그냥 수정하기 : 전체 다 바뀌는거
+
+5. id에 해당하는거 삭제하기
+	DELETE /api/menus/:id
+			id는 상황에 따라서 넣을때도 있고 뺄때도 있음
+			body로 하면 안넣음 > 대신 느림
+	id 해당 없이 그냥 삭제하기 : 전체 다 지우는거

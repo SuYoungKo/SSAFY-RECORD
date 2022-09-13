@@ -1,0 +1,72 @@
+nginx
+웹서버 
+단순 파일, 페이지를 리턴
+동적인 요청을 하는 경우 WAS에 요청을 보낸다
+
+express
+web application server
+DB에 요청을 하는등 여러가지 로직을 실행할때 사용하는서버
+
+=======================
+<잘못된 설계>
+유저 정보 설계
+전체 유저 정보 조회
+	GET /users/get-all
+특정 유저 조회
+	GET/users/userid-10
+유저를 생성 (회원가입)
+	POST/users/adduser
+	나 회원가입 할거야 나 회원가입 할거야 (두번말하는것)
+유저 수정
+	PATCH/users/updateuser/10
+유저삭제
+	DELET/users/delete/10
+	
+========================
+<좋은 API 설계법>
+
+GET/POST만 활용할 수 잇는 환경
+POST users/updats
+POST users/deletr
+
+// 1. REST API 식으로 통신하는 방법
+// axios -> 요청을 보내서 그에 맞는 결과를 리턴 받는 식
+백엔드랑 프론트 분리
+
+// 2. jsp - JAVA에서 활용하는 서버 템플릿 엔진 (GET,POST밖에 활용 불가)
+// html 태그에서 GET (a태그, location.href)
+// form태그에서 POST(form태그는 get , post만 가능 patch,delete가 안되는 상황
+
+
+//html클릭시 ->JAVA서버에 도착 -> 해당 jsp엔진을 읽어서 + db랑 합쳐서 html생성해서 한번에 리턴
+백엔드랑 프론트가 합쳐저 있는 형태 (form태그로밖에 못함)
+이런서버의 특징 :  로딩화면이 없고 바로 뜬다
+
+
+(유의) GET POST PATCH DELETE는 이미 행동이 담겨있다
+
+전체 유저 정보 조회
+	GET /users
+	(회원정보 리스트)
+	(게시글로 치면 전체 게시글 리스트)
+특정 유저 조회
+	GET/users/:id
+	(/users/3)
+	3번유저를 가져온다
+	(게시글 /posts/:id)
+회원가입
+	POST /users
+회원 정보 수정
+	PATCH /users/:id
+회원 정보 삭제
+	DELETE/users/:id
+
+
+============================
+req.query(?key=value&) /  req.params(:id)
+GET POST PATCH DELETE에서 모두 사용
+query랑 params는 주소창 노출된다
+
+req.body
+주소창에 노출 X
+POST,PATCH에서만 활용

@@ -1,0 +1,38 @@
+* node JS는 DOM조작 안됨
+
+=> 브라우저랑 상관 없는애
+==> evaluate 로 쓸수 있게 해줌 
+
+* 전역설치
+== npm install --location=global nodemon
+== npm install -g nodemon
+
+* 명령어
+npm i = 기존의 락파일 패키지 설치
+
+npm list --depth=0 => 현재 패키지에 설치된 최상위 디펜던스
+npm list --depth=1 => 현재 패키지에 설치된 두번째 디펜던스
+
+npm i g => 전역에 설치
+
+============================================
+라우터 : 각각의 경로로 만들어주는 프로그램
+라우트 : 각각의 경로 /api/info=> 라우트
+
+============================================
+*MYSQL 로그인
+tndud0396
+mysql -h localhost -u root -p
+mysql -u root -p
+
+
+1. 노드설치
+2. json formater
+3. mobaxterm깔기
+4. sql설치, 연동
+5. npm설치
+
+===============================================
+로그인 할때 mysql -u kosu -p
+==============================================
+DB 사용 할때 USE kosu;
