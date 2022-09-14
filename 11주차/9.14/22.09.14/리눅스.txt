@@ -1,0 +1,17 @@
+
+:%s/kr.archive.ubuntu.com/mirror.kakao.com/g
+
+:wq <=저장
+
+터미널 새로 다운
+sudo apt install terminator
+
+vim 설치
+sudo apt install vim
+
+sudo apt install net-tools openssh-server
+
+포트포워딩
+리눅스	ifconfig 게스트IP / 22포트 
+윈도우	ipconfig 호스트 IP/ 22 포트
+
